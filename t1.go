@@ -34,7 +34,7 @@ var layout = template.Must(template.New("layout").Parse(`<!doctype html>
 	<title>{{ .Title }}</title>
 	<style>
 	  :root { color-scheme: light dark; }
-	  body { max-width: 880px; margin: 48px auto; padding: 0 20px; font: 16px/1.7 system-ui, -apple-system, "Segoe UI", sans-serif; }
+	  body { max-width: 880px; margin: 48px auto; padding: 0 20px; font: 16px/1.7 system-ui, -apple-system, "Segoe UI", sans-serif; background: url("/static/bg.jpg") no-repeat center center fixed; background-size: cover; }
 	  a { text-decoration: none; }
 	  header { margin-bottom: 28px; }
 	  nav a { margin-right: 12px; }
@@ -79,6 +79,7 @@ func main() {
 	http.HandleFunc("/post/", handlePost)
 	http.HandleFunc("/rss.xml", handleRSS)
 	http.HandleFunc("/sitemap.xml", handleSitemap)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	log.Println("Blog running at http://localhost:8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
